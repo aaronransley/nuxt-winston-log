@@ -1,0 +1,19 @@
+{
+  "name": "nuxt-winston-log",
+  "version": "0.0.1",
+  "description": "Enable Datadog tracing in your Nuxt application",
+  "main": "index.js",
+  "author": "Aaron Ransley (https://aaronransley.com)",
+  "contributors": [
+    "Charlie Pitkin",
+    "FINE, A Brand Agency (https://wearefine.com)"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "cross-fetch": "^3.0.2",
+    "serialize-error": "^4.1.0",
+    "uuid": "^3.3.2",
+    "vue": "^2.6.10",
+    "winston": "^3.2.1"
+  }
+}
