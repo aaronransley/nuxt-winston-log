@@ -5,11 +5,13 @@ import { capture } from './serverMiddleware/capture'
 import { extractReqInfo } from './utils'
 
 const csrfToken = uuidv1()
+const pkg = require('./package.json')
 const { combine, timestamp, json, errors } = format
 
 require('winston-daily-rotate-file')
 
-export default function ErrorHandling(moduleOptions = { capturePath: '/_capture' }) {
+module.exports = function WinstonLog() {
+  const winstonOptions = { capturePath: '/_capture', ...this.options.winstonLog }
   const logger = createLogger({
     exitOnError: false,
     format: combine(timestamp(), errors({ stack: true }), json()),
@@ -20,7 +22,7 @@ export default function ErrorHandling(moduleOptions = { capturePath: '/_capture'
         maxSize: '500m',
         maxFiles: '30d',
         zippedArchive: true,
-        ...moduleOptions.transportOptions
+        ...winstonOptions.transportOptions
       })
     ]
   })
@@ -28,14 +30,14 @@ export default function ErrorHandling(moduleOptions = { capturePath: '/_capture'
   this.nuxt.moduleContainer.addPlugin({
     src: path.resolve(__dirname, 'plugin.js'),
     mode: 'client',
-    options: { capturePath: moduleOptions.capturePath, csrfToken }
+    options: { capturePath: winstonOptions.capturePath, csrfToken }
   })
 
   this.nuxt.moduleContainer.addServerMiddleware({
-    path: moduleOptions.capturePath,
+    path: winstonOptions.capturePath,
     handler: (req, res) => {
       return capture(req, res, {
-        moduleOptions,
+        winstonOptions,
         logger,
         csrfToken,
         processEnv: process.env.NODE_ENV
@@ -61,3 +63,5 @@ export default function ErrorHandling(moduleOptions = { capturePath: '/_capture'
     })
   )
 }
+
+module.exports.meta = pkg

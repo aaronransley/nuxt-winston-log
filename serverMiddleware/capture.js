@@ -2,7 +2,7 @@ import { extractReqInfo } from '../utils'
 
 export function capture(req, res, context) {
   const reqInfo = extractReqInfo(req)
-  const capturePath = context.moduleOptions.capturePath
+  const capturePath = context.winstonOptions.capturePath
 
   // Check for CSRF business
   const securedEnvironment = context.processEnv !== 'development'
