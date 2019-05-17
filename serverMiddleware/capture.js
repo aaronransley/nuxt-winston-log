@@ -5,7 +5,7 @@ export function capture(req, res, context) {
   const capturePath = context.moduleOptions.capturePath
 
   // Check for CSRF business
-  const securedEnvironment = true || context.processEnv !== 'development'
+  const securedEnvironment = context.processEnv !== 'development'
   const csrfTokenValid = req.headers['x-plumbus'] === context.csrfToken
 
   if (!csrfTokenValid && securedEnvironment) {
