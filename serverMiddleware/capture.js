@@ -3,25 +3,22 @@ import { extractReqInfo } from '../utils'
 export function capture(req, res, context) {
   const reqInfo = extractReqInfo(req)
   const capturePath = context.winstonOptions.capturePath
+  const csrfToken = context.csrfToken
   const clientCsrf = req.headers['x-plumbus']
 
   // Check for CSRF business
   const securedEnvironment = context.processEnv !== 'development'
-  const csrfTokenValid = clientCsrf === context.csrfToken
+  const csrfTokenValid = clientCsrf === csrfToken
 
   if (!csrfTokenValid && securedEnvironment) {
     context.logger.warn(
-      `Incorrect CSRF during ${capturePath}. Client (${clientCsrf}) vs server (${
-        context.csrfToken
-      })`,
+      `Incorrect CSRF during ${capturePath}. Client (${clientCsrf}) vs server (${csrfToken})`,
       {
         reqInfo
       }
     )
     res.end(
-      `Issue during ${capturePath}: invalid plumbus supplied. Client (${clientCsrf}) vs server (${
-        context.csrfToken
-      })`
+      `Issue during ${capturePath}: invalid plumbus supplied. Client (${clientCsrf}) vs server (${csrfToken})`
     )
     return
   }

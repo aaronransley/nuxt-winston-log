@@ -30,7 +30,7 @@ module.exports = function WinstonLog() {
   this.nuxt.moduleContainer.addPlugin({
     src: path.resolve(__dirname, 'plugin.js'),
     mode: 'client',
-    options: { capturePath: winstonOptions.capturePath, csrfToken }
+    options: { csrfToken, capturePath: winstonOptions.capturePath }
   })
 
   this.nuxt.moduleContainer.addServerMiddleware({
