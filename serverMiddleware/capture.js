@@ -2,28 +2,6 @@ import { extractReqInfo } from '../utils'
 
 export function capture(req, res, context) {
   const reqInfo = extractReqInfo(req)
-  const capturePath = context.winstonOptions.capturePath
-  const csrfToken = context.csrfToken
-  const clientCsrf = req.headers['x-plumbus']
-
-  // Check for CSRF business
-  const securedEnvironment = context.processEnv !== 'development'
-  const csrfTokenValid = clientCsrf === csrfToken
-
-  if (!csrfTokenValid && securedEnvironment) {
-    context.logger.warn(
-      `Incorrect CSRF during ${capturePath}. Client (${clientCsrf}) vs server (${csrfToken})`,
-      {
-        reqInfo
-      }
-    )
-    res.end(
-      `Issue during ${capturePath}: invalid plumbus supplied. Client (${clientCsrf}) vs server (${csrfToken})`
-    )
-    return
-  }
-  // }
-
   let body = ''
 
   // Stream data into utf8-encoded body
@@ -46,7 +24,7 @@ export function capture(req, res, context) {
       context.logger.error(new Error(error), {
         reqInfo
       })
-      res.end(`Issue during ${capturePath}: ${error}`)
+      res.end(`Issue during ${context.winstonOptions.capturePath}: ${error}`)
     } finally {
       if (!res.finished) {
         res.end(`${messageType} logged`)

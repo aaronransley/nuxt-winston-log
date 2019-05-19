@@ -4,7 +4,6 @@ import { createLogger, format, transports } from 'winston'
 import { capture } from './serverMiddleware/capture'
 import { extractReqInfo } from './utils'
 
-const csrfToken = uuidv1()
 const pkg = require('./package.json')
 const { combine, timestamp, json, errors } = format
 
@@ -30,7 +29,7 @@ module.exports = function WinstonLog() {
   this.nuxt.moduleContainer.addPlugin({
     src: path.resolve(__dirname, 'plugin.js'),
     mode: 'client',
-    options: { csrfToken, capturePath: winstonOptions.capturePath }
+    options: { capturePath: winstonOptions.capturePath }
   })
 
   this.nuxt.moduleContainer.addServerMiddleware({
@@ -39,7 +38,6 @@ module.exports = function WinstonLog() {
       return capture(req, res, {
         winstonOptions,
         logger,
-        csrfToken,
         processEnv: process.env.NODE_ENV
       })
     }

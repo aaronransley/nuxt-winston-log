@@ -7,8 +7,7 @@ Vue.config.errorHandler = function(err, vm, info) {
     method: 'post',
     headers: {
       Accept: 'text/plain',
-      'Content-Type': 'application/json',
-      'x-plumbus': '<%= options.csrfToken %>'
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify({
       type: 'error',
