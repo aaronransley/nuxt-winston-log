@@ -1,8 +1,7 @@
 import path from 'path'
-import uuidv1 from 'uuid/v1'
 import { createLogger, format, transports } from 'winston'
 import { capture } from './serverMiddleware/capture'
-import { extractReqInfo } from './utils'
+import { extractReqInfo, mkdirIfNotExists } from './utils'
 
 const pkg = require('./package.json')
 const { combine, timestamp, json, errors } = format
@@ -10,17 +9,20 @@ const { combine, timestamp, json, errors } = format
 require('winston-daily-rotate-file')
 
 module.exports = function WinstonLog() {
-  const winstonOptions = { capturePath: '/_capture', ...this.options.winstonLog }
+  const winstonOptions = {
+    capturePath: '/_capture',
+    logPath: './logs',
+    ...this.options.winstonLog
+  }
+
+  mkdirIfNotExists(path.resolve(process.cwd(), winstonOptions.logPath))
+
   const logger = createLogger({
     exitOnError: false,
     format: combine(timestamp(), errors({ stack: true }), json()),
     transports: [
-      new transports.DailyRotateFile({
-        filename: `${process.env.NODE_ENV}-%DATE%.log`,
-        dirname: path.resolve(process.cwd(), 'logs/'),
-        maxSize: '500m',
-        maxFiles: '30d',
-        zippedArchive: true,
+      new transports.File({
+        filename: path.resolve(winstonOptions.logPath, `${process.env.NODE_ENV}.log`),
         ...winstonOptions.transportOptions
       })
     ]

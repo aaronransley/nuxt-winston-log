@@ -12,9 +12,7 @@
   "dependencies": {
     "cross-fetch": "^3.0.2",
     "serialize-error": "^4.1.0",
-    "uuid": "^3.3.2",
     "vue": "^2.6.10",
-    "winston": "^3.2.1",
-    "winston-daily-rotate-file": "^3.9.0"
+    "winston": "^3.2.1"
   }
 }
