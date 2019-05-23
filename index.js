@@ -6,8 +6,6 @@ import { extractReqInfo, mkdirIfNotExists } from './utils'
 const pkg = require('./package.json')
 const { combine, timestamp, json, errors } = format
 
-require('winston-daily-rotate-file')
-
 module.exports = function WinstonLog() {
   const winstonOptions = {
     capturePath: '/_capture',
