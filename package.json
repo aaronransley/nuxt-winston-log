@@ -1,6 +1,6 @@
 {
   "name": "nuxt-winston-log",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Enable Datadog tracing in your Nuxt application",
   "main": "index.js",
   "author": "Aaron Ransley (https://aaronransley.com)",
