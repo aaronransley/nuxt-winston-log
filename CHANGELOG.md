@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - ...
 
+## [v0.0.3] - 5-26-2019
+
+- Add a logo, but ignore it from NPM package. No logo for you!
+
 ## [v0.0.2] - 5-26-2019
 
 - Add readme and a changelog
