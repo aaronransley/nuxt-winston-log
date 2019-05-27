@@ -1,5 +1,7 @@
 # nuxt-winston-log
 
+<img alt="Winston + Nuxt logo" src="icon.png?raw=true" width="128" />
+
 A module to add `winston` / logging to your Nuxt application. This module only supports Nuxt apps running in universal mode.
 
 By default the following events are captured:
