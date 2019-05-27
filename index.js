@@ -8,8 +8,9 @@ const { combine, timestamp, json, errors } = format
 
 module.exports = function WinstonLog() {
   const winstonOptions = {
-    capturePath: '/_capture',
     logPath: './logs',
+    logName: `${process.env.NODE_ENV}.log`,
+    capturePath: '/_capture',
     ...this.options.winstonLog
   }
 
@@ -20,10 +21,11 @@ module.exports = function WinstonLog() {
     format: combine(timestamp(), errors({ stack: true }), json()),
     transports: [
       new transports.File({
-        filename: path.resolve(winstonOptions.logPath, `${process.env.NODE_ENV}.log`),
+        filename: path.resolve(winstonOptions.logPath, winstonOptions.logName),
         ...winstonOptions.transportOptions
       })
-    ]
+    ],
+    ...winstonOptions.loggerOptions
   })
 
   this.nuxt.moduleContainer.addPlugin({
