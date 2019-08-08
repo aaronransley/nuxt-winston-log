@@ -4,8 +4,8 @@
   "description": "Enable Datadog tracing in your Nuxt application",
   "main": "index.js",
   "author": "Aaron Ransley (https://aaronransley.com)",
-  "homepage": "https://github.com/aaronransley/nuxt-datadog-trace",
-  "repository": "github:aaronransley/nuxt-datadog-trace",
+  "homepage": "https://github.com/aaronransley/nuxt-winston-log",
+  "repository": "github:aaronransley/nuxt-winston-log",
   "contributors": [
     "Charlie Pitkin",
     "FINE, A Brand Agency (https://wearefine.com)"
