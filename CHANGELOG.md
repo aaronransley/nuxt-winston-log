@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - ...
 
+## [v0.1.0] - 5-11-2019
+
+- Remove `serialize-error` dependency for IE 11 browser compat
+
 ## [v0.0.6] - 5-26-2019
 
 - Readme fix for new logo path
