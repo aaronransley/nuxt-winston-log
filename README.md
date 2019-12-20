@@ -7,8 +7,7 @@ A module to add `winston` / logging to your Nuxt application. This module only s
 By default the following events are captured:
 
 1. `error` level: SSR errors via Nuxt middleware hooks
-2. `error` level: Unhandled Vue exceptions from the client, delivered to the backend via a small built-in API
-3. `info` level: Basic access logs for all endpoints in your Nuxt app
+3. `info` level: Basic access logs for `serverMiddleware` endpoints + pages in your Nuxt app
 
 All logs captured include a bit of additional metadata pulled from the [Node.js `request` object](https://nodejs.org/dist/latest-v10.x/docs/api/http.html#http_class_http_incomingmessage):
 
@@ -55,10 +54,7 @@ $ yarn add nuxt-winston-log # or npm i nuxt-winston-log
   logPath: './logs',
   // Name of log file.
   // Change this to keep things tidy.
-  logName: `${process.env.NODE_ENV}.log`,
-  // Built-in API path for errors from the client.
-  // Change this to avoid collisions with your routes.
-  capturePath: '/_capture',
+  logName: `${process.env.NODE_ENV}.log`
 }
 ```
 

@@ -14,7 +14,6 @@ module.exports = function WinstonLog() {
   const winstonOptions = {
     logPath: './logs',
     logName: `${process.env.NODE_ENV}.log`,
-    capturePath: '/_capture',
     ...this.options.winstonLog
   }
 

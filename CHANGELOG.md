@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - ...
 
+## [v1.0.1] - 12-20-2019
+
+- Update README
+- Cleanup now-defunct `capturePath` option
+
 ## [v1.0.0] - 12-20-2019
 
 - Remove client side capturing feature. This is best replicated with something like the new [Browser Log Collection features](https://docs.datadoghq.com/logs/log_collection/javascript/?tab=us) in Datadog
