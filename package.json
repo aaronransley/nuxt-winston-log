@@ -1,6 +1,6 @@
 {
   "name": "nuxt-winston-log",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Enable logging to Winston in your Nuxt application",
   "main": "index.js",
   "author": "Aaron Ransley (https://aaronransley.com)",
