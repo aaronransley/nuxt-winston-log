@@ -1,7 +1,11 @@
 import path from 'path'
 import { createLogger, format, transports } from 'winston'
-import { capture } from './serverMiddleware/capture'
-import { extractReqInfo, mkdirIfNotExists } from './utils'
+import {
+  checkHeadersAccepts,
+  checkHeadersContentType,
+  extractReqInfo,
+  mkdirIfNotExists
+} from './utils'
 
 const pkg = require('./package.json')
 const { combine, timestamp, json, errors } = format
@@ -28,36 +32,29 @@ module.exports = function WinstonLog() {
     ...winstonOptions.loggerOptions
   })
 
-  this.nuxt.moduleContainer.addPlugin({
-    src: path.resolve(__dirname, 'plugin.js'),
-    mode: 'client',
-    options: { capturePath: winstonOptions.capturePath }
-  })
-
-  this.nuxt.moduleContainer.addServerMiddleware({
-    path: winstonOptions.capturePath,
-    handler: (req, res) => {
-      return capture(req, res, {
-        winstonOptions,
-        logger,
-        processEnv: process.env.NODE_ENV
-      })
-    }
-  })
-
   this.nuxt.hook('render:setupMiddleware', app =>
     app.use((req, res, next) => {
-      logger.info(`Accessed ${req.url}`, {
-        reqInfo: extractReqInfo(req)
-      })
+      const reqInfo = extractReqInfo(req)
+      const isHtmlOrJson =
+        checkHeadersAccepts(reqInfo.headers, ['text/html', 'application/xhtml']) ||
+        checkHeadersContentType(reqInfo.headers, ['application/json'])
+      const isInternalNuxtRequest = reqInfo.url && reqInfo.url.includes('/_nuxt/')
+
+      if (isHtmlOrJson && !isInternalNuxtRequest) {
+        logger.info(`Accessed ${req.url}`, {
+          ...reqInfo
+        })
+      }
       next()
     })
   )
 
   this.nuxt.hook('render:errorMiddleware', app =>
     app.use((err, req, res, next) => {
-      logger.error(new Error(err), {
-        reqInfo: extractReqInfo(req)
+      const newError = new Error(err)
+      newError.stack = err.stack
+      logger.error(newError, {
+        ...extractReqInfo(req)
       })
       next(err)
     })
