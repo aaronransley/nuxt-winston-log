@@ -93,4 +93,19 @@ export default {
 }
 ```
 
+4. To access the winston logger instance from within Nuxt lifecycle areas, use the `$winstonLog` key from the Nuxt `context` object.
+
+```js
+// e.g. inside `~/store/index.js`
+// ...
+export const actions = {
+  async nuxtServerInit({ store, commit }, { req, $winstonLog }) {
+    // ...
+    $winstonLog.info(`x-forwarded-host: ${req.headers['x-forwarded-host']}`)
+    // ...
+  }
+}
+// ...
+```
+
 # [Changelog](./CHANGELOG.md)

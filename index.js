@@ -1,37 +1,49 @@
-import path from 'path'
+import { resolve } from 'path'
 import { createLogger, format, transports } from 'winston'
 import {
   checkHeadersAccepts,
   checkHeadersContentType,
   extractReqInfo,
-  mkdirIfNotExists
+  mkdirIfNotExists,
 } from './utils'
 
 const pkg = require('./package.json')
 const { combine, timestamp, json, errors } = format
 
-module.exports = function WinstonLog() {
+module.exports = function WinstonLog(moduleOptions = {}) {
   const winstonOptions = {
     logPath: './logs',
     logName: `${process.env.NODE_ENV}.log`,
-    ...this.options.winstonLog
+    ...this.options.winstonLog,
+    ...moduleOptions,
   }
 
-  mkdirIfNotExists(path.resolve(process.cwd(), winstonOptions.logPath))
+  mkdirIfNotExists(resolve(process.cwd(), winstonOptions.logPath))
 
   const logger = createLogger({
     exitOnError: false,
     format: combine(timestamp(), errors({ stack: true }), json()),
     transports: [
       new transports.File({
-        filename: path.resolve(winstonOptions.logPath, winstonOptions.logName),
-        ...winstonOptions.transportOptions
-      })
+        filename: resolve(winstonOptions.logPath, winstonOptions.logName),
+        ...winstonOptions.transportOptions,
+      }),
     ],
-    ...winstonOptions.loggerOptions
+    ...winstonOptions.loggerOptions,
   })
 
-  this.nuxt.hook('render:setupMiddleware', app =>
+  // Persist a reference to Winston logger instance.
+  // This is injected by `~/plugin.server.js` for use via Nuxt context objects
+  process.winstonLog = logger
+
+  // Add serverside-only plugin
+  this.addPlugin({
+    src: resolve(__dirname, 'plugin.server.js'),
+    fileName: 'plugin.server.js',
+    mode: 'server',
+  })
+
+  this.nuxt.hook('render:setupMiddleware', (app) =>
     app.use((req, res, next) => {
       const reqInfo = extractReqInfo(req)
       const isHtmlOrJson =
@@ -41,19 +53,19 @@ module.exports = function WinstonLog() {
 
       if (isHtmlOrJson && !isInternalNuxtRequest) {
         logger.info(`Accessed ${req.url}`, {
-          ...reqInfo
+          ...reqInfo,
         })
       }
       next()
     })
   )
 
-  this.nuxt.hook('render:errorMiddleware', app =>
+  this.nuxt.hook('render:errorMiddleware', (app) =>
     app.use((err, req, res, next) => {
       const newError = new Error(err)
       newError.stack = err.stack
       logger.error(newError, {
-        ...extractReqInfo(req)
+        ...extractReqInfo(req),
       })
       next(err)
     })
