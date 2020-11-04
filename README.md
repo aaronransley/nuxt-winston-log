@@ -39,7 +39,7 @@ $ yarn add nuxt-winston-log # or npm i nuxt-winston-log
 }
 ```
 
-3. Change options as needed. See Usage section for details.
+3. Change options using the `winstonLog` key as needed. See Usage section for details.
 
 # Usage
 
@@ -47,65 +47,134 @@ $ yarn add nuxt-winston-log # or npm i nuxt-winston-log
 
     The default values are:
 
-```js
-{
-  // Path that log files will be created in.
-  // Change this to keep things neat.
-  logPath: './logs',
-  // Name of log file.
-  // Change this to keep things tidy.
-  logName: `${process.env.NODE_ENV}.log`
-}
-```
+    ```js
+    // ...
+    {
+      // Path that log files will be created in.
+      // Change this to keep things neat.
+      logPath: './logs',
+
+      // Name of log file.
+      // Change this to keep things tidy.
+      logName: `${process.env.NODE_ENV}.log`,
+
+      // Setting to determine if filesystem is accessed to auto-create logPath.
+      // Set this to `false` for non-filesystem based logging setups.
+      autoCreateLogPath: true,
+
+      // Setting to determine if default logger instance is created for you.
+      // Set this to `false` and provide `loggerOptions` (usage item #3) to
+      // completely customize the logger instance (formatting, transports, etc.)
+      useDefaultLogger: true,
+
+      // Settings to determine if default handlers should be
+      // registered for requests and errors respectively.
+      // Set to `true` to skip request logging (level: info).
+      skipRequestMiddlewareHandler: false,
+      // Set to `true` to skip error logging (level: error).
+      skipErrorMiddlewareHandler: false
+    }
+    // ...
+    ```
 
 2. To customize the [File Transport instance](https://github.com/winstonjs/winston/blob/master/docs/transports.md#file-transport), pass options to the `transportOptions` key:
 
-```js
-import path from 'path'
-const logfilePath = path.resolve(process.cwd(), './logs', `${process.env.NODE_ENV}.log`)
+    Example in your apps `~/nuxt.config.js` file:
+    ```js
+    import path from 'path'
+    const logfilePath = path.resolve(process.cwd(), './logs', `${process.env.NODE_ENV}.log`)
 
-export default {
-  winstonLog: {
-    transportOptions: {
-      filename: logfilePath
+    export default {
+      // Configure nuxt-winston-log module
+      winstonLog: {
+        transportOptions: {
+          filename: logfilePath
+        }
+      }
     }
-  }
-}
-```
+    ```
 
-3. To customize the [Logger instance](https://github.com/winstonjs/winston#creating-your-own-logger), pass options to the `loggerOptions` key. Note that you can completely overwrite all defaults this way, and establish your own `format`, `transports`, and so on.
+3. To customize the [Logger instance](https://github.com/winstonjs/winston#creating-your-own-logger), set `useDefaultLogger` option to `false`, and make sure you provide a custom set of `loggerOptions` to be passed to [Winston's `createLogger`](https://github.com/winstonjs/winston#creating-your-own-logger) under the hood:
 
-```js
-import { format, transports } from 'winston'
-const { combine, timestamp, label, prettyPrint } = format
+    Example in your apps `~/nuxt.config.js` file:
+    ```js
+    // Note imports from winston core for transports, formatting helpers, etc.
+    import { format, transports } from 'winston'
+    const { combine, timestamp, label, prettyPrint } = format
 
-export default {
-  winstonLog: {
-    loggerOptions: {
-      format: combine(
-        label({ label: 'Custom Nuxt logging!' }),
-        timestamp(),
-        prettyPrint()
-      ),
-      transports: [new transports.Console()]
+    export default {
+      // Configure nuxt-winston-log module
+      winstonLog: {
+        useDefaultLogger: false,
+        loggerOptions: {
+          format: combine(
+            label({ label: 'Custom Nuxt logging!' }),
+            timestamp(),
+            prettyPrint()
+          ),
+          transports: [new transports.Console()]
+        }
+      }
     }
-  }
-}
-```
+    ```
 
-4. To access the winston logger instance from within Nuxt lifecycle areas, use the `$winstonLog` key from the Nuxt `context` object.
+4. To disable automatic creation of the `logPath` directory, set `autoCreateLogPath` option to `false`:
 
-```js
-// e.g. inside `~/store/index.js`
-// ...
-export const actions = {
-  async nuxtServerInit({ store, commit }, { req, $winstonLog }) {
+    Example in your apps `~/nuxt.config.js` file:
+    ```js
     // ...
-    $winstonLog.info(`x-forwarded-host: ${req.headers['x-forwarded-host']}`)
+    export default {
+      // Configure nuxt-winston-log module
+      winstonLog: {
+        autoCreateLogPath: false
+      }
+    }
     // ...
-  }
-}
-// ...
-```
+    ```
+
+5. To access the winston logger instance from within Nuxt lifecycle areas, use the `$winstonLog` key from the Nuxt `context` object. **Note:** This is only available for server-side executions. For example, because `asyncData` is an isomorphic function in Nuxt, you will need to guard `$winstonLog` access with something like `if (process.server) { ... }`
+
+    Example `nuxtServerInit` in your apps `~/store/index.js`:
+    ```js
+    // ...
+    export const actions = {
+      async nuxtServerInit({ store, commit }, { req, $winstonLog }) {
+        $winstonLog.info(`x-forwarded-host: ${req.headers['x-forwarded-host']}`)
+      }
+    }
+    // ...
+    ```
+
+    Example `asyncData` in your apps `~/pages/somepage.vue`:
+    ```js
+    // ...
+    asyncData(context) {
+      if (process.server) {
+        context.$winstonLog.info('Hello from asyncData on server')
+      }
+    }
+    // ...
+    ```
+
+6. To disable default request and error logging behaviors, the `skipRequestMiddlewareHandler` and `skipErrorMiddlewareHandler` options can be set to `true`. For more information on what these handlers do out of the box, see the source at the [bottom of the `~/index.js` file](https://github.com/aaronransley/nuxt-winston-log/blob/master/index.js).
+
+    Example in your apps `~/nuxt.config.js` file:
+    ```js
+    // ...
+    export default {
+      // Configure nuxt-winston-log module
+      winstonLog: {
+        skipRequestMiddlewareHandler: true,
+        skipErrorMiddlewareHandler: true
+      }
+    }
+    // ...
+    ```
+
+    Adding your own middleware handlers to Nuxt is outside the scope of this documentation, but can be accomplished using [a custom module of your own](https://nuxtjs.org/docs/2.x/directory-structure/modules#write-your-own-module).
+
+    Because modules are executed sequentially, your custom module should be loaded _after the `nuxt-winston-log` module_. You can then access the logger instance via `process.winstonLog` as needed.
+
+    See [the `~/index.js` file](https://github.com/aaronransley/nuxt-winston-log/blob/master/index.js) for some example middleware handlers / hooks.
 
 # [Changelog](./CHANGELOG.md)

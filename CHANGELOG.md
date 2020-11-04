@@ -9,6 +9,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - ...
 
+## [v1.2.0] - 11-4-2020
+### Added
+- Added ability to remove default request and error middleware handlers. Use the `skipRequestMiddlewareHandler` and `skipErrorMiddlewareHandler` to skip the registration of these.
+- Added ability to avoid filesystem access in non-filesystem based logging setups using `autoCreateLogPath` and `useDefaultLogger` options. See README.md (usage items #3 and #4) for changes.
+  - Example in your apps `nuxt.config.js`:
+      ```js
+      // ...
+      winstonLog: {
+        autoCreateLogPath: false,
+        useDefaultLogger: false,
+        loggerOptions: {
+          format: combine(
+            label({ label: 'Custom Nuxt logging!' }),
+            timestamp(),
+            prettyPrint()
+          ),
+          transports: [new transports.Console()]
+        }
+      }
+      // ...
+      ```
+
+### Changed
+- Updated README w/ information on new features
+
 ## [v1.1.1] - 11-4-2020
 ### Changed
 - Bumped deps
@@ -19,12 +44,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - Learn more about the `context` object here: https://nuxtjs.org/api/context
 - Added support for passing options to module via inline module options in `nuxt.config.js`
     - For example:
-      ```
-      ...
+      ```js
+      // ...
       modules: [
-        ['nuxt-winston-log', { logName: 'special-logs.log` }]
+        ['nuxt-winston-log', { logName: 'special-logs.log' }]
       ]
-      ...
+      // ...
       ```
 
 ### Changed
