@@ -11,8 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [v1.2.0] - 11-4-2020
 ### Added
-- Added ability to remove default request and error middleware handlers. Use the `skipRequestMiddlewareHandler` and `skipErrorMiddlewareHandler` to skip the registration of these.
-- Added ability to avoid filesystem access in non-filesystem based logging setups using `autoCreateLogPath` and `useDefaultLogger` options. See README.md (usage items #3 and #4) for changes.
+- Added ability to avoid filesystem access in non-filesystem based logging setups using `autoCreateLogPath` and `useDefaultLogger` options. Documented in README.md (usage items #3 and #4).
   - Example in your apps `nuxt.config.js`:
       ```js
       // ...
@@ -30,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
       }
       // ...
       ```
+- Added ability to remove default request and error middleware handlers. Use the `skipRequestMiddlewareHandler` and `skipErrorMiddlewareHandler` options to skip the registration of these. Documented in README.md.
 
 ### Changed
 - Updated README w/ information on new features
