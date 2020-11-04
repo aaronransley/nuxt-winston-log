@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - ...
 
+## [v1.1.1] - 11-4-2020
+### Changed
+- Bumped deps
+
 ## [v1.1.0] - 4-13-2020
 ### Added
 - Added reference to winston logger instance from Nuxt `context` object. Access via `context.$winstonLog` from within `asyncData`, `nuxtServerInit`, or other Nuxt lifecyle areas that receive a `context` object.
