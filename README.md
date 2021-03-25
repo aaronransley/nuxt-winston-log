@@ -156,7 +156,7 @@ $ yarn add nuxt-winston-log # or npm i nuxt-winston-log
     // ...
     ```
 
-6. To disable default request and error logging behaviors, the `skipRequestMiddlewareHandler` and `skipErrorMiddlewareHandler` options can be set to `true`. For more information on what these handlers do out of the box, see the source at the [bottom of the `~/index.js` file](https://github.com/aaronransley/nuxt-winston-log/blob/master/index.js).
+6. To disable default request and error logging behaviors, the `skipRequestMiddlewareHandler` and `skipErrorMiddlewareHandler` options can be set to `true`. For more information on what these handlers do out of the box, see the source at the [bottom of the `~/index.js` file](https://github.com/aaronransley/nuxt-winston-log/blob/master/index.js#L58-L89).
 
     Example in your apps `~/nuxt.config.js` file:
     ```js
