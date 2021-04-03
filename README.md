@@ -170,11 +170,11 @@ $ yarn add nuxt-winston-log # or npm i nuxt-winston-log
     }
     // ...
     ```
-
+    
     Adding your own middleware handlers to Nuxt is outside the scope of this documentation, but can be accomplished using [a custom module of your own](https://nuxtjs.org/docs/2.x/directory-structure/modules#write-your-own-module).
+    
+# Using `process.winstonLog` in a Nuxt Module
 
-    Because modules are executed sequentially, your custom module should be loaded _after the `nuxt-winston-log` module_. You can then access the logger instance via `process.winstonLog` as needed.
-
-    See [the `~/index.js` file](https://github.com/aaronransley/nuxt-winston-log/blob/master/index.js) for some example middleware handlers / hooks.
+Because modules are executed sequentially, any additional [Nuxt modules](https://nuxtjs.org/docs/2.x/directory-structure/modules#write-your-own-module) should be loaded _after the `nuxt-winston-log` module_. You can then access the logger instance via `process.winstonLog` as needed.
 
 # [Changelog](./CHANGELOG.md)
