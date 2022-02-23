@@ -69,10 +69,12 @@ $ yarn add nuxt-winston-log # or npm i nuxt-winston-log
 
       // Settings to determine if default handlers should be
       // registered for requests and errors respectively.
-      // Set to `true` to skip request logging (level: info).
+     // Set to `true` to skip request logging (level: [uses requestMiddlewareLevel]).
       skipRequestMiddlewareHandler: false,
       // Set to `true` to skip error logging (level: error).
-      skipErrorMiddlewareHandler: false
+     skipErrorMiddlewareHandler: false,
+     // Set log level for RequestMiddlewareHandler
+     requestMiddlewareLevel: 'info'
     }
     // ...
     ```
