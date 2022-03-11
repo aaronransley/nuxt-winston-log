@@ -2,7 +2,9 @@
 
 <img alt="Winston + Nuxt logo" src="https://raw.githubusercontent.com/aaronransley/nuxt-winston-log/master/icon.png" width="128" />
 
-A module to add `winston` / logging to your Nuxt application. This module only supports Nuxt apps running in universal mode.
+A module to add `winston` / logging to your Nuxt application.<br>
+This module only supports Nuxt projects running on a server (e.g. universal, SSR mode).<br>
+This module _**does not support**_ statically generated (e.g. SSG) Nuxt apps.
 
 By default the following events are captured:
 
