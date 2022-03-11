@@ -1,8 +1,8 @@
 # nuxt-winston-log
 
-A Nuxt 2.x module to add [winston](https://github.com/winstonjs/winston)-powered logging to your Nuxt application.
+A Nuxt `2.x` module to add [winston](https://github.com/winstonjs/winston)-powered logging to your Nuxt application.
 
-* **Works with**: Nuxt projects running on a server (e.g. universal, SSR mode).
+* **Works with**: Nuxt `@2.x` projects running on a server (e.g. universal, SSR mode).
 * **Does not support**: Statically generated Nuxt projects (i.e. SSG via `nuxt generate`).
 
 <img alt="Winston + Nuxt logo" src="https://raw.githubusercontent.com/aaronransley/nuxt-winston-log/master/icon.png" width="128" />
