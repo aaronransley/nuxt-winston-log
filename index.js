@@ -18,6 +18,7 @@ module.exports = function WinstonLog(moduleOptions = {}) {
     useDefaultLogger: true,
     skipRequestMiddlewareHandler: false,
     skipErrorMiddlewareHandler: false,
+    requestMiddlewareLevel: 'info',
     ...this.options.winstonLog,
     ...moduleOptions,
   }
@@ -65,9 +66,7 @@ module.exports = function WinstonLog(moduleOptions = {}) {
         const isInternalNuxtRequest = reqInfo.url && reqInfo.url.includes('/_nuxt/')
 
         if (isHtmlOrJson && !isInternalNuxtRequest) {
-          logger.info(`Accessed ${req.url}`, {
-            ...reqInfo,
-          })
+          logger.log(winstonOptions.requestMiddlewareLevel, `Accessed ${req.url}`, { ...reqInfo })
         }
         next()
       })
