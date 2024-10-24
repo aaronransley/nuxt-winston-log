@@ -12,7 +12,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "vue": "^2.6.12",
+    "vue": "^3.0.0",
     "winston": "^3.3.3"
   }
 }
